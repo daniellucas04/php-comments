@@ -1,0 +1,17 @@
+.rounded-button {
+    border-radius: 100%;
+    border: none;
+    background-color: transparent;
+    color: red;
+    text-align: center;
+    transition: .2s ease-in-out all;
+}
+
+.rounded-button:hover {
+    color: rgb(192, 2, 2);
+}
+
+.user-img {
+    height: 50px;
+    border-radius: 100%;
+}
