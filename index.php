@@ -1,28 +1,24 @@
 <?php
-
+require_once "autoload.php";
+require_once "config/config.php";
 date_default_timezone_set('America/Sao_Paulo');
 
 use Connection\Statements;
 use Utils\Functions;
 
-require_once("class/Connection/Database.php");
-require_once("class/Connection/Statements.php");
-require_once("class/Utils/Functions.php");
-
 $statements = new Statements;
-
-$statements->select('*', 'comments');
+$statements->select('*', TB_COMMENTS);
 
 if ( !empty($_POST) ) {
     $postForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
     if ( isset($postForm['delete']) AND $postForm['delete'] == 'true' ) {
         unset($postForm['delete']);
-        $statements->delete('comments', 'WHERE id = ' . $postForm['id']);
+        $statements->delete(TB_COMMENTS, 'WHERE id = ' . $postForm['id']);
     }
 
     if ( isset($postForm['create']) AND $postForm['create'] == 'true' ) {
         unset($postForm['create']);
-        $statements->insert('comments', $postForm);
+        $statements->insert(TB_COMMENTS, $postForm);
     }
 }
 ?>
@@ -45,8 +41,8 @@ if ( !empty($_POST) ) {
                 <input type="hidden" name="create" value="true">
             </div>
             <div class="col form-floating">
-                <textarea id="comments" class="form-control" name="comments" placeholder="Deixe seu comentário" style="height:250px"></textarea>
-                <label for="comments">Comentário</label>
+                <textarea id="comment" class="form-control" name="comment" placeholder="Deixe seu comentário" style="height:250px"></textarea>
+                <label for="comment">Comentário</label>
             </div>
             <div class="d-flex justify-content-end align-items-center mt-2">
                 <button class="btn btn-outline-primary d-flex align-items-center gap-2" id="submit" type="submit">Enviar <i class="bi bi-chat"></i></button>
@@ -55,12 +51,12 @@ if ( !empty($_POST) ) {
         
         <section>
             <?php 
-            $statements->select('*', 'comments', 'WHERE status = "P"');
+            $statements->select('*', TB_COMMENTS, 'WHERE status = "P"');
             if ( $statements->getRows() > 0 ) {
                 foreach ( $statements->getResult() as $comments) {
                     echo "<form action='' class='mt-5' method='post'>";
                     $commentID = $comments['id'];
-                    $comment = $comments['comments'];
+                    $comment = $comments['comment'];
                     $createdAt = Functions::brazilianDate($comments['created_at'], true);
                     $updatedAt = $comments['updated_at'];
                     
