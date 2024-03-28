@@ -1,3 +1,11 @@
+<?php
+require_once "../autoload.php";
+require_once "../config/config.php";
+use Models\User;
+use Utils\Functions;
+
+$user = new User;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,24 +18,14 @@
 </head>
 <body>
     <?php
-    require_once "../autoload.php";
-    require_once "../config/config.php";
-    use Models\User;
-    use Utils\Functions;
-
-    $user = new User;
-    if ( $user->checkLogin() ) {
-        Functions::location('http://' . URL_BASE . '/');
-    }
-
     if ( !empty($_POST) ) {
         $postForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         
-        $user->exeLogin($postForm);
+        $user->exeRegister($postForm);
         if ( $user->getResult() ) {
             // Sucesso
             echo '<div class="alert alert-success">' . $user->getError() . '</div>';
-            Functions::location('http://' . URL_BASE . '/', 5);
+            Functions::location('http://' . URL_BASE . '/pages/login', 3);
         } else {
             // Erro
             echo '<div class="alert alert-danger">' . $user->getError() . '</div>';
@@ -35,7 +33,7 @@
     }
     ?>
     <main class="container mt-5">
-        <h3 class="text-center">Comments - Login</h3>
+        <h3 class="text-center">Comments - Register</h3>
         <div class="row justify-content-center align-items-center">
             <section class="col-6">
                 <form class="row gap-2" action="" method="post">
@@ -45,13 +43,12 @@
                     </div>
                     <div class="input-group">
                         <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
-                        <input class="form-control" type="password" name="password" id="password" placeholder="Senha">
+                        <input class="form-control" type="password" name="password" id="password" placeholder="Senha" minlength="8">
                     </div>
                     <div class="row justify-content-center align-items-center mx-auto">
                         <button class="btn btn-sm btn-primary" type="submit">Login</button>
                     </div>
                 </form>
-                <a href="http://comments.localhost/pages/register">Registre-se</a>
             </section>
         </div>
     </main>

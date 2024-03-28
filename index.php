@@ -4,7 +4,13 @@ require_once "config/config.php";
 date_default_timezone_set('America/Sao_Paulo');
 
 use Connection\Statements;
+use Models\User;
 use Utils\Functions;
+
+$user = new User;
+if ( !$user->checkLogin() ) {
+    Functions::location('http://' . URL_BASE . '/pages/login');
+}
 
 $statements = new Statements;
 $statements->select('*', TB_COMMENTS);
@@ -34,6 +40,11 @@ if ( !empty($_POST) ) {
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+    <nav class="navbar ">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a href="<?php echo 'http://' . URL_BASE . '/logout' ?>">Logout</a></li>
+        </ul>
+    </nav>
     <main class="container mt-5 mb-5">
         <form id="form" action="" method="post">
             <div id="hidden-inputs">

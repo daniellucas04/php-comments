@@ -5,10 +5,11 @@ namespace Utils;
 class Functions {
     /**
      * @param string $url = link para o qual o usuário será redirecionado
-     * @param int $number = tempo que levará para o usuário ser redirecionado
+     * @param int $timeout = tempo que levará para o usuário ser redirecionado
      */
     public static function location($url = '', $timeout = 0) {
-        echo "<script>setTimeout(function(){window.location = 'http://tasks.localhost/$url'}, $timeout)</script>";
+        $timeout *= 1000;
+        echo "<script>setTimeout(function(){window.location = '$url'}, $timeout)</script>";
     }
 
     /**
