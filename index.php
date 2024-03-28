@@ -11,12 +11,14 @@ $user = new User;
 if ( !$user->checkLogin() ) {
     Functions::location('http://' . URL_BASE . '/pages/login');
 }
+$userID = $user->getUser();
 
 $statements = new Statements;
 $statements->select('*', TB_COMMENTS);
 
 if ( !empty($_POST) ) {
     $postForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
     if ( isset($postForm['delete']) AND $postForm['delete'] == 'true' ) {
         unset($postForm['delete']);
         $statements->delete(TB_COMMENTS, 'WHERE id = ' . $postForm['id']);
@@ -50,6 +52,7 @@ if ( !empty($_POST) ) {
             <div id="hidden-inputs">
                 <input type="hidden" name="created_at" value="<?php echo date('Y-m-d H:i:s') ?>">
                 <input type="hidden" name="create" value="true">
+                <input type='hidden' name='id_user' value="<?= $userID ?>">
             </div>
             <div class="col form-floating">
                 <textarea id="comment" class="form-control" name="comment" placeholder="Deixe seu comentário" style="height:250px"></textarea>
@@ -65,8 +68,9 @@ if ( !empty($_POST) ) {
             $statements->select('*', TB_COMMENTS, 'WHERE status = "P"');
             if ( $statements->getRows() > 0 ) {
                 foreach ( $statements->getResult() as $comments) {
-                    echo "<form action='' class='mt-5' method='post'>";
+                    echo "<form id='user-comment' action='' class='mt-5' method='post'>";
                     $commentID = $comments['id'];
+                    $commentUserID = $comments['id_user'];
                     $comment = $comments['comment'];
                     $createdAt = Functions::brazilianDate($comments['created_at'], true);
                     $updatedAt = $comments['updated_at'];
@@ -77,17 +81,19 @@ if ( !empty($_POST) ) {
                     // Comment card
                     echo "<div class='border p-3 rounded-2 shadow-sm d-flex justify-content-between align-items-center'>",
                          "<span class='d-flex gap-4 align-items-center'>
-                         <img src='assets/user.jpg' class='img-thumbnail user-img'>
-                         $comment
-                         </span>",
-                         "<button class='rounded-button' type='submit'><i class='bi bi-x-circle' style='font-size:1.5rem;'></i></button>",
-                         "</div>";
-
-                    //  Hidden inputs
-                    echo "<div class='hidden-inputs'>",
-                         "<input type='hidden' name='id' value='$commentID'>",
-                         "<input type='hidden' name='delete' value='true'>",
-                         "</div>",
+                         <img src='assets/user.jpg' class='img-thumbnail user-img'>";
+                         if ( $commentUserID == $userID ) {
+                             echo "<input class='input-comment' name='comment' value='$comment'>";
+                         } else {
+                            echo $comment;
+                         }
+                    echo "</span>";
+                         if( $commentUserID == $userID) {
+                            echo "<span class='comment-actions'>",
+                                 "<button id='delete-comment' type='submit'><i class='bi bi-x-circle' style='font-size:1.2rem;'></i></button>",
+                                 "</span>";
+                         }
+                    echo "</div>",
                          "</form>";
                 }
             }

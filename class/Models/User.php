@@ -16,7 +16,11 @@ class User {
      * @return string $error;
      */
     public function getUser() {
-        return $this->user;
+        $statements = new Statements;
+        $statements->select('id', TB_USERS, 'WHERE access_token = "' . $this->accessToken . '"');
+        if ( $statements->getRows() == 1 ) {
+            return $statements->getResult()[0]['id'];
+        }
     }
 
 

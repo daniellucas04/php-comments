@@ -1,17 +1,11 @@
-.rounded-button {
-    border-radius: 100%;
-    border: none;
-    background-color: transparent;
-    color: red;
-    text-align: center;
-    transition: .2s ease-in-out all;
-}
+.rounded-button {border-radius:100%;border:none;background-color:transparent;text-align:center;transition:.2s ease-in-out all;}
 
-.rounded-button:hover {
-    color: rgb(192, 2, 2);
-}
+.input-comment {outline:none;border:none;}
+.input-comment:focus {border:1px solid #6e6e6e49;text-decoration:underline;border-radius:4px;}
 
-.user-img {
-    height: 50px;
-    border-radius: 100%;
-}
+.comment-actions {display:flex;gap:.5rem;align-items: center;}
+.comment-actions > button {background-color:transparent;border:1px solid #6e6e6e49;border-radius:3px;transition:.2s ease-in-out all;}
+.comment-actions #delete:hover {color:rgb(196, 77, 77);}
+.comment-actions #edit:hover {color:rgb(71, 129, 255);}
+
+.user-img {height:50px;border-radius:100%;}
